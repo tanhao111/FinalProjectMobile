@@ -70,6 +70,9 @@ public class CheckOutActivity extends AppCompatActivity {
         txtUserAddress.setText("Address: " + user.getAddress());
     }
 
+    /**
+     * SET EVENT FOR BUTTON {btnCheckOut}
+     */
     private void setEvent(){
         btnCheckOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +95,10 @@ public class CheckOutActivity extends AppCompatActivity {
         });
     }
 
+
+    /**
+     * GET DATA FROM FIREBASE AND SET ADAPTER FOR LISTVIEW
+     */
     private void getData(){
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference dbRef = db.getReference("data/basket/");

@@ -47,7 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String phoneNumber = txtPhone.getText().toString();
                 String address = txtAddress.getText().toString();
 
-
+                // CHECK DATA INPUT
                 if(email.compareTo("") == 0 || username.compareTo("") == 0 || phoneNumber.compareTo("") == 0 || address.compareTo("") == 0|| password.compareTo("") == 0 || repeatPassword.compareTo("") == 0){
                     Toast.makeText(getApplicationContext(), "All fields are required", Toast.LENGTH_SHORT).show();
                     return;
@@ -58,6 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
+                // CREATE NEW dao TO REGISTER
                 UserDao userDao = new UserDao();
                 User user = new User(username, address, email, password, phoneNumber);
                 userDao.register(getApplicationContext(), user);

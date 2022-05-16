@@ -20,6 +20,9 @@ import com.project.models.Product;
 import com.project.util.Const;
 import com.squareup.picasso.Picasso;
 
+/**
+ * VIEW DETAIL WHEN CLICK ON PRODUCT
+ */
 public class ViewDetailsActivity extends AppCompatActivity {
 
     private ImageView imageView;
@@ -126,6 +129,7 @@ public class ViewDetailsActivity extends AppCompatActivity {
             }
         });
 
+        // ADD THIS PRODUCT TO BASKET
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -138,6 +142,7 @@ public class ViewDetailsActivity extends AppCompatActivity {
                     ItemProduct item = new ItemProduct(product, Integer.parseInt(txtQuantity.getText().toString()));
                     BasketDao basketDao = new BasketDao();
 
+                    // IF NOT HAVE BASKET, CREATE ONE AND ADD PRODUCT
                     if(isExitKey.isEmpty()){
                         String userId = sharedPreferences.getString(Const.USER_KEY, "");
                         Basket basket = new Basket(userId);
@@ -149,6 +154,7 @@ public class ViewDetailsActivity extends AppCompatActivity {
 
                         Toast.makeText(getApplicationContext(), "Add new item to new basket", Toast.LENGTH_SHORT).show();
                     }else{
+                        // BASKET EXIST, JUST ADD NEW PRODUCT
                         basketDao.addNewProductToBasket(isExitKey,item);
                         Toast.makeText(getApplicationContext(), "Add new item to basket", Toast.LENGTH_SHORT).show();
 

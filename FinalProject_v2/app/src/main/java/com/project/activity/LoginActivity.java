@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String email = txtEmail.getText().toString().trim();
                 String pass = txtPassword.getText().toString().trim();
-
+                // login
                 if(email.compareTo("") != 0 && pass.compareTo("") != 0){
                     SharedPreferences ref = getApplicationContext().getSharedPreferences(Const.SHARED_PREFERENCE, MODE_PRIVATE);
                     userDao.login(getApplicationContext(), ref, email, pass);
@@ -52,6 +52,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * forward to Register if user want register new accout
+         */
         btnForwardRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -22,6 +22,11 @@ public class CheckOutAdapter extends BaseAdapter {
     private List<ItemProduct> itemProductsList;
     private TextView txtProductName, txtQuantityAndPrice;
 
+    /**
+     * INIT ADAPTER
+     * @param context APPLICATION CONTEXT
+     * @param map ALL PRODUCT OF BASKET
+     */
     public CheckOutAdapter(Context context, Map<String, ItemProduct> map){
         this.listProduct = map;
         this.context = context;

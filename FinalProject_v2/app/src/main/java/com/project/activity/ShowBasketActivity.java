@@ -38,6 +38,9 @@ public class ShowBasketActivity extends AppCompatActivity {
         listView = findViewById(R.id.listView);
         btnOrder = findViewById(R.id.btnOrder);
 
+        /**
+         * CHECK SHARED PREFERENCE IF HAVE A BASKET KEY, GET DATA FROM DATABASE AND SHOW IT.
+         */
 
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(Const.SHARED_PREFERENCE, MODE_PRIVATE);
         key = sharedPreferences.getString(Const.BASKET_KEY, "");
@@ -63,6 +66,7 @@ public class ShowBasketActivity extends AppCompatActivity {
                 }
             });
 
+            // FORWARD TO CHECKOUT ACTIVITY IF CLICK
             btnOrder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

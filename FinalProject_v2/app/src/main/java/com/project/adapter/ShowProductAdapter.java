@@ -30,6 +30,11 @@ public class ShowProductAdapter extends BaseAdapter {
     private TextView txtView;
 
 
+    /**
+     * INIT ADAPTER
+     * @param c APPLICATION CONTEXT
+     * @param ob MAP OF ALL PRODUCT
+     */
     public ShowProductAdapter(Context c, Map<String, Product> ob){
         this.context = c;
         this.object = ob;

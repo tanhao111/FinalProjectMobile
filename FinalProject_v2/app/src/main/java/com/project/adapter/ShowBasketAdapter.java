@@ -25,6 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * SHOW PRODUCT IN BASKET
+ */
 public class ShowBasketAdapter extends BaseAdapter {
 
     private List<String> keys;
@@ -35,6 +38,11 @@ public class ShowBasketAdapter extends BaseAdapter {
     private EditText txtQuantity;
     private Button btnDelete;
 
+    /**
+     * INIT ADAPTER
+     * @param context  APPLICATION CONTEXT
+     * @param productMap MAP OF PRODUCT IN BASKET
+     */
     public ShowBasketAdapter(Context context, Map<String, ItemProduct> productMap){
         this.context = context;
         this.productMap = productMap;
@@ -72,6 +80,7 @@ public class ShowBasketAdapter extends BaseAdapter {
         txtQuantity = view.findViewById(R.id.txtQuantity);
         btnDelete = view.findViewById(R.id.btnDeleteItem);
 
+        // load image into imageView
         Picasso.get().load(product.getProductImageUrl()).into(imageView);
         txtName.setText(product.getProductName());
         txtPrice.setText("Price: " + String.valueOf(product.getProductPrice()));
@@ -82,12 +91,15 @@ public class ShowBasketAdapter extends BaseAdapter {
         String basketKey = sharedPreferences.getString(Const.BASKET_KEY, "");
         String itemKey = keys.get(pos);
 
+        // delete product out of basket
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 basketDao.deleteItemOnBasket(basketKey, itemKey);
             }
         });
+
+        // update quantity of product
         txtQuantity.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

@@ -35,6 +35,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /**
+         * CHECK SHARED PREFERENCES IF HAVE INFORMATION OF USER OR NOT
+         * IF NOT FORWARD TO ACTIVITY LOGIN
+         */
         Intent intent;
         SharedPreferences mPref =getApplicationContext().getSharedPreferences(Const.SHARED_PREFERENCE, MODE_PRIVATE);
         String userData = mPref.getString(Const.USER_KEY, "");
@@ -43,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             startActivity(intent);
         }
 
-
+        // THIS IS MAIN, SHOW ALL PRODUCTS
         // calling this activity's function to use ActionBAr utility method
         ActionBar actionBar = getSupportActionBar();
 
