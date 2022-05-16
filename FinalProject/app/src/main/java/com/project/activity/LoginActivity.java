@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.project.util.Const;
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     EditText txtEmail, txtPassword;
@@ -30,7 +32,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String password = txtPassword.getText().toString().replace(" ","");
 
 
-        if(email.compareTo("admin@app.shop") == 0 && password.compareTo("admin@123") == 0){
+        if(email.compareTo(Const.EMAIL) == 0 && password.compareTo(Const.PASSWORD) == 0){
             Toast.makeText(this, "Logged In", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);

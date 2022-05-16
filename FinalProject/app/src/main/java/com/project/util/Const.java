@@ -2,8 +2,8 @@ package com.project.util;
 
 public class Const {
 
-    public static final String EMAIL = "19110358@student.hcmute.edu.vn";
-    public static final String PASSWORD = "Nth@330165";
+    public static final String EMAIL = "admin@app.shop";
+    public static final String PASSWORD = "admin@123";
     public static final int PICK_IMAGE = 100;
 
     public static final int PACKING = 0;
