@@ -107,9 +107,10 @@ public class ManagerAccountActivity extends AppCompatActivity implements View.On
                 SharedPreferences.Editor  editor = sharedPreferences.edit();
                 editor.remove(Const.USER_DATA);
                 editor.remove(Const.USER_KEY);
+                editor.remove(Const.BASKET_KEY);
                 editor.commit();
 
-                Intent a = new Intent(this, Initialize.class);
+                Intent a = new Intent(this, MainActivity.class);
                 startActivity(a);
                 break;
             default: break;

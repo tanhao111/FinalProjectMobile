@@ -34,15 +34,20 @@ public class ManagerProductsAdapter extends BaseAdapter {
         this.object = ob;
         products =  new ArrayList<>();
         keys = new ArrayList<>();
-
-        for(Map.Entry<String, Product> ele:this.object.entrySet()){
-            products.add(ele.getValue());
-            keys.add(ele.getKey());
+        if(ob != null){
+            for(Map.Entry<String, Product> ele:this.object.entrySet()){
+                products.add(ele.getValue());
+                keys.add(ele.getKey());
+            }
         }
+
 
     }
     @Override
     public int getCount() {
+        if(object == null){
+            return 0;
+        }
         return object.size();
     }
 

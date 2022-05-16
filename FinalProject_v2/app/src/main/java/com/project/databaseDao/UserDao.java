@@ -44,7 +44,7 @@ public class UserDao {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 GenericTypeIndicator<Map<String,User>> genericTypeIndicator = new GenericTypeIndicator<Map<String, User>>() {};
                 Map<String, User> userLists = snapshot.getValue(genericTypeIndicator);
-
+                Boolean isSuccess = false;
                 if(userLists != null){
                     for(Map.Entry<String, User> ele: userLists.entrySet()){
                         User user = ele.getValue();
@@ -58,15 +58,17 @@ public class UserDao {
 
                             Toast.makeText(context, "Logged In", Toast.LENGTH_LONG).show();
 
-
+                            isSuccess = true;
                             Intent i = new Intent(context, MainActivity.class);
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             context.startActivity(i);
                         }
-                        else{
-                            Toast.makeText(context, "Email or password invalid", Toast.LENGTH_LONG).show();
-                        }
                     }
+                    if(!isSuccess){
+                        Toast.makeText(context, "Email or password invalid", Toast.LENGTH_LONG).show();
+
+                    }
+
                 }else{
                     Toast.makeText(context, "User not found", Toast.LENGTH_LONG).show();
                 }

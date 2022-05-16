@@ -36,6 +36,7 @@ public class ManagerProductsFragment extends Fragment implements AdapterView.OnI
 
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -51,14 +52,17 @@ public class ManagerProductsFragment extends Fragment implements AdapterView.OnI
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 GenericTypeIndicator<Map<String, Product>> genericTypeIndicator = new GenericTypeIndicator<Map<String, Product>>() {};
                 Map<String, Product> productsList = snapshot.getValue(genericTypeIndicator);
-
+                ManagerProductsAdapter managerProductsAdapter;
                 if(productsList != null){
-                    ManagerProductsAdapter managerProductsAdapter = new ManagerProductsAdapter(getContext(), productsList);
-                    gridView.setAdapter(managerProductsAdapter);
-                    gridView.setOnItemClickListener(ManagerProductsFragment.this);
+                    managerProductsAdapter  = new ManagerProductsAdapter(getContext(), productsList);
+
                 }else{
                     Toast.makeText(getContext(), "No Have Data", Toast.LENGTH_LONG).show();
+                    managerProductsAdapter = new ManagerProductsAdapter(getContext(), null);
                 }
+
+                gridView.setAdapter(managerProductsAdapter);
+                gridView.setOnItemClickListener(ManagerProductsFragment.this);
 
             }
 

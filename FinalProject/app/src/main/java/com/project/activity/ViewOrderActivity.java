@@ -1,7 +1,6 @@
 package com.project.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.project.DAO.OrderDao;
 import com.project.adapter.ViewOrderAdapter;
 import com.project.model.ItemProduct;
 import com.project.model.Order;
@@ -26,13 +26,13 @@ import com.project.util.Const;
 
 import java.util.Map;
 
-public class ViewOrderActivity extends AppCompatActivity {
+public class ViewOrderActivity extends AppCompatActivity implements View.OnClickListener {
     private ListView listView;
     private TextView txtUserName, txtUserAddress, txtUserPhone, txtTotal;
-    private Button btnCheckOut;
+    private Button btnUpdateStatus;
 
     private int totalCost = 0, status;
-    private String basketKey, userKey;
+    private String basketKey, userKey, orderKey;
     Order order;
 
     @Override
@@ -47,6 +47,7 @@ public class ViewOrderActivity extends AppCompatActivity {
 
         // get data user from SharedPreferences;
         Intent intent = getIntent();
+        orderKey = intent.getStringExtra("orderKey");
         basketKey = intent.getStringExtra("basketKey");
         userKey = intent.getStringExtra("userKey");
         totalCost = Integer.parseInt(intent.getStringExtra("total"));
@@ -58,7 +59,16 @@ public class ViewOrderActivity extends AppCompatActivity {
         txtUserAddress = findViewById(R.id.txtUserAddress);
         txtUserPhone = findViewById(R.id.txtUserPhone);
         txtTotal = findViewById(R.id.txtTotal);
-        btnCheckOut = findViewById(R.id.btnCheckOut);
+        btnUpdateStatus = findViewById(R.id.btnUpdateStatus);
+        btnUpdateStatus.setOnClickListener(this);
+        if(status  == Const.PACKING){
+            btnUpdateStatus.setText("Packaged");
+        }else if(status == Const.SHIPPING){
+            btnUpdateStatus.setText("Shipped");
+        }else if(status == Const.DONE){
+            btnUpdateStatus.setText("Done");
+            btnUpdateStatus.setEnabled(false);
+        }
 
         String s = "Total : " + totalCost;
         txtTotal.setText(s);
@@ -106,5 +116,18 @@ public class ViewOrderActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Something wrong", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onClick(View view) {
+        order.setStatus(status + 1);
+        OrderDao orderDao = new OrderDao();
+        orderDao.updateOrder(orderKey, order);
+        Toast.makeText(this, "Order status updated", Toast.LENGTH_SHORT).show();
+
+        //send email
+
+        Intent intent = new Intent(this, OrderFragment.class);
+        startActivity(intent);
     }
 }

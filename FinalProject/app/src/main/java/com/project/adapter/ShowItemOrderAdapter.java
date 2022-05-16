@@ -63,6 +63,7 @@ public class ShowItemOrderAdapter extends BaseAdapter{
                 // Forward to update status
                 Intent intent = new Intent(context, ViewOrderActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("orderKey", keys.get(i));
                 intent.putExtra("basketKey", order.getBasketId());
                 intent.putExtra("userKey", order.getUserId());
                 intent.putExtra("status", order.getStatus() + "");

@@ -2,63 +2,102 @@ package com.project.activity;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ReportFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
+import com.project.adapter.ManagerProductsAdapter;
+import com.project.adapter.ShowItemOrderAdapter;
+import com.project.model.Order;
+import com.project.model.Product;
+import com.project.util.Const;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class ReportFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public ReportFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ReportFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ReportFragment newInstance(String param1, String param2) {
-        ReportFragment fragment = new ReportFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_report, container, false);
+
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference dbRef;
+
+        View view = inflater.inflate(R.layout.fragment_report, container, false);
+        TextView txtShowMoney = view.findViewById(R.id.txtShowMoney);
+        TextView txtShowOrder = view.findViewById(R.id.txtShowOrder);
+        TextView txtShowProduct = view.findViewById(R.id.txtShowProduct);
+
+        dbRef = db.getReference("data/orders/");
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                GenericTypeIndicator<Map<String, Order>> genericTypeIndicator = new GenericTypeIndicator<Map<String, Order>>() {
+                };
+                Map<String, Order> orderMap = snapshot.getValue(genericTypeIndicator);
+
+                int num0 = 0, num1 = 0, num2 = 0;
+                int money = 0;
+                if (orderMap != null) {
+                    for (Map.Entry<String, Order> ele : orderMap.entrySet()) {
+                        if (ele.getValue().getStatus() == Const.PACKING) {
+                            num0++;
+                        } else if (ele.getValue().getStatus() == Const.SHIPPING) {
+                            num1++;
+                        } else {
+                            num2++;
+                            money += ele.getValue().getTotalMoney();
+                        }
+                    }
+                }
+
+                String s = num0 + " Packing | " + num1 + " Shipping | " + num2 + " Done";
+                String s2 = "Achieved: total " + money + " VND";
+                txtShowOrder.setText(s);
+                txtShowMoney.setText(s2);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        dbRef = db.getReference("data/products/");
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                GenericTypeIndicator<Map<String, Product>> genericTypeIndicator = new GenericTypeIndicator<Map<String, Product>>() {};
+                Map<String, Product> productsList = snapshot.getValue(genericTypeIndicator);
+                if(productsList == null){
+                    txtShowProduct.setText("Don't have any product");
+                }
+                else{
+                    txtShowProduct.setText("Have " + productsList.size() + " in stock");
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "Error Loading Image", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        return view;
     }
 }

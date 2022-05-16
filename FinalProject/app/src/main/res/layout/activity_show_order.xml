@@ -52,7 +52,7 @@
 
 
         <Button
-            android:id="@+id/btnCheckOut"
+            android:id="@+id/btnUpdateStatus"
             android:text="Order"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

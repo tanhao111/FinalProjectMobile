@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableString;
 
@@ -28,6 +29,19 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tab_layout);
         viewPager = findViewById(R.id.view_pager);
 
+        // set tab title
+        ArrayList<String> title = new ArrayList<String>();
+        title.add("Ordered");
+        title.add("Manager Product");
+        title.add("Report");
+
+        tabLayout.setupWithViewPager(viewPager);
+        prepareViewPaper(viewPager, title);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         // set tab title
         ArrayList<String> title = new ArrayList<String>();
         title.add("Ordered");

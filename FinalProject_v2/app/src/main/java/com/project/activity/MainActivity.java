@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,8 +20,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 import com.project.adapter.ShowProductAdapter;
 import com.project.models.Product;
+import com.project.util.Const;
 
 import java.util.Map;
 
@@ -31,6 +34,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent;
+        SharedPreferences mPref =getApplicationContext().getSharedPreferences(Const.SHARED_PREFERENCE, MODE_PRIVATE);
+        String userData = mPref.getString(Const.USER_KEY, "");
+        if(userData == null || userData.compareTo("") == 0){
+            intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
+
 
         // calling this activity's function to use ActionBAr utility method
         ActionBar actionBar = getSupportActionBar();
