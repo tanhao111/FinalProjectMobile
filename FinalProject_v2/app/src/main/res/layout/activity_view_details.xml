@@ -74,7 +74,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txtQuantity"
             android:hint="Quantity"
-            android:inputType="textEmailAddress"
+            android:inputType="number"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:drawablePadding="5dp"

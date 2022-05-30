@@ -2,7 +2,7 @@ package com.project.databaseDao;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.project.models.Orders;
+import com.project.models.Order;
 
 public class OrderDao {
         private FirebaseDatabase db;
@@ -14,7 +14,7 @@ public class OrderDao {
         }
 
 
-        public void createNewOrder(Orders orders){
+        public void createNewOrder(Order orders){
                 dbRef.push().setValue(orders);
         }
 }

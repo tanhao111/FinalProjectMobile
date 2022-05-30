@@ -20,6 +20,9 @@ import com.project.models.Product;
 import com.project.util.Const;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.text.ParseException;
+
 /**
  * VIEW DETAIL WHEN CLICK ON PRODUCT
  */
@@ -101,8 +104,14 @@ public class ViewDetailsActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                int num = Integer.parseInt(txtQuantity.getText().toString());
-                txtSumCost.setText("Total: " + num*cost + " vnđ");
+                try {
+                    int num = Integer.parseInt(txtQuantity.getText().toString());
+                    txtSumCost.setText("Total: " + num * cost + " vnđ");
+                }catch(NumberFormatException e){
+                    Toast.makeText(getApplicationContext(), "Quantity must be a positive number", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+
             }
         });
 

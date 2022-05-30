@@ -1,5 +1,6 @@
 package com.project.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,16 +12,26 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.project.databaseDao.UserDao;
+import com.project.models.Order;
 import com.project.models.User;
 import com.project.util.Const;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ManagerAccountActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText txtUserName, txtEmail, txtPhone, txtAddress;
     private  TextView txtId;
-    private Button btnUpdateAccount, btnLogOut;
+    private Button btnUpdateAccount, btnLogOut, btnWaiting, btnShipping, btnDone;
     private boolean isUpdate;
     private String key;
     private User user;
@@ -33,6 +44,7 @@ public class ManagerAccountActivity extends AppCompatActivity implements View.On
 
         initialize();
         setEnable(false);
+        initializeData();
     }
 
     private void initialize(){
@@ -64,6 +76,54 @@ public class ManagerAccountActivity extends AppCompatActivity implements View.On
 
         btnLogOut =findViewById(R.id.btnLogout);
         btnLogOut.setOnClickListener(this);
+
+        btnWaiting = findViewById(R.id.btnWaiting);
+        btnWaiting.setOnClickListener(this);
+
+        btnShipping = findViewById(R.id.btnShipping);
+        btnShipping.setOnClickListener(this);
+
+        btnDone = findViewById(R.id.btnDone);
+        btnDone.setOnClickListener(this);
+    }
+
+    private void initializeData(){
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference dbRef = db.getReference("/data/orders/");
+
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                GenericTypeIndicator<Map<String, Order>> genericTypeIndicator = new GenericTypeIndicator<Map<String, Order>>() {};
+                Map<String, Order> orderMap = snapshot.getValue(genericTypeIndicator);
+
+                int waiting = 0, shipping = 0, done = 0;
+
+                if(orderMap != null){
+                    for(Map.Entry<String, Order> ele: orderMap.entrySet()){
+                        if(ele.getValue().getUserId().compareTo(key) == 0) {
+                            if (ele.getValue().getStatus() == Const.PACKING) {
+                                waiting += 1;
+                            } else if (ele.getValue().getStatus() == Const.SHIPPING) {
+                                shipping += 1;
+                            } else {
+                                done += 1;
+                            }
+                        }
+                    }
+                }
+
+                btnDone.setText("DONE " + String.valueOf(done));
+                btnWaiting.setText("Waiting " + String.valueOf(waiting));
+                btnShipping.setText("SHIPPING " + String.valueOf(shipping));
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void setEnable(boolean isEnable){

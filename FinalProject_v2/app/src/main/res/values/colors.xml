@@ -8,5 +8,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="color_text">#FF03DAC5</color>
-
+    <color name="color_accent">#BD8800</color>
 </resources>

@@ -19,6 +19,7 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.project.DAO.OrderDao;
 import com.project.adapter.ViewOrderAdapter;
+import com.project.model.Chat;
 import com.project.model.ItemProduct;
 import com.project.model.Order;
 import com.project.model.User;
@@ -29,11 +30,13 @@ import java.util.Map;
 public class ViewOrderActivity extends AppCompatActivity implements View.OnClickListener {
     private ListView listView;
     private TextView txtUserName, txtUserAddress, txtUserPhone, txtTotal;
-    private Button btnUpdateStatus;
+    private Button btnUpdateStatus, btnDeleteOrder;
 
     private int totalCost = 0, status;
     private String basketKey, userKey, orderKey;
     Order order;
+    FirebaseDatabase db = FirebaseDatabase.getInstance();
+    DatabaseReference dbRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,15 +62,18 @@ public class ViewOrderActivity extends AppCompatActivity implements View.OnClick
         txtUserAddress = findViewById(R.id.txtUserAddress);
         txtUserPhone = findViewById(R.id.txtUserPhone);
         txtTotal = findViewById(R.id.txtTotal);
+        btnDeleteOrder = findViewById(R.id.btnDeleteOrder);
+        btnDeleteOrder.setOnClickListener(this);
         btnUpdateStatus = findViewById(R.id.btnUpdateStatus);
         btnUpdateStatus.setOnClickListener(this);
         if(status  == Const.PACKING){
             btnUpdateStatus.setText("Packaged");
         }else if(status == Const.SHIPPING){
             btnUpdateStatus.setText("Shipped");
-        }else if(status == Const.DONE){
+        }else{
             btnUpdateStatus.setText("Done");
             btnUpdateStatus.setEnabled(false);
+            btnDeleteOrder.setEnabled(false);
         }
 
         String s = "Total : " + totalCost;
@@ -76,8 +82,7 @@ public class ViewOrderActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void getData(){
-        FirebaseDatabase db = FirebaseDatabase.getInstance();
-        DatabaseReference dbRef;
+
 
         dbRef = db.getReference("data/users/"+ userKey);
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -120,14 +125,42 @@ public class ViewOrderActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View view) {
-        order.setStatus(status + 1);
+
         OrderDao orderDao = new OrderDao();
-        orderDao.updateOrder(orderKey, order);
-        Toast.makeText(this, "Order status updated", Toast.LENGTH_SHORT).show();
+        Chat chat;
+        Intent intent;
+        switch (view.getId()){
+            case R.id.btnUpdateStatus:
+                order.setStatus(status + 1);
+                orderDao.updateOrder(orderKey, order);
+                Toast.makeText(this, "Order status updated", Toast.LENGTH_SHORT).show();
 
-        //send email
+                String msg = "Your ordered have id: " + orderKey + ". ";
+                if(order.getStatus() == Const.SHIPPING){
+                    msg = msg + "The order is being shipped.";
+                }else if(order.getStatus() == Const.DONE){
+                    msg = msg + "Completed order.";
+                }
 
-        Intent intent = new Intent(this, OrderFragment.class);
-        startActivity(intent);
+                chat =  new Chat("Admin", msg, System.currentTimeMillis());
+                dbRef = db.getReference("/chats/"+ userKey);
+                dbRef.push().setValue(chat);
+
+                intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btnDeleteOrder:
+                order.setStatus(-1);
+                orderDao.updateOrder(orderKey, order);
+
+                chat =  new Chat("Admin", "Your ordered key: " + orderKey + ": has been Canceled!", System.currentTimeMillis());
+                dbRef = db.getReference("/chats/"+ userKey);
+                dbRef.push().setValue(chat);
+                intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+
+                break;
+        }
+
     }
 }

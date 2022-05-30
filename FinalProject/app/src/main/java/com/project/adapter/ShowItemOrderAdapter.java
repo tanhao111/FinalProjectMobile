@@ -81,8 +81,10 @@ public class ShowItemOrderAdapter extends BaseAdapter{
             txtStatus.setText("Waiting for the package");
         }else if(order.getStatus() == Const.SHIPPING){
             txtStatus.setText("SHIPPING");
-        }else{
+        }else if(order.getStatus() == Const.DONE) {
             txtStatus.setText("Done");
+        }else{
+            txtStatus.setText("Canceled");
         }
 
         return view;

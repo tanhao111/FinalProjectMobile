@@ -114,7 +114,6 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="ffffff" />
                                       <entry key="outputName" value="ic_app" />
                                     </map>
                                   </option>
@@ -131,8 +130,19 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="C:\Users\hao_n\AppData\Local\Temp\ic_android_black_24dp.xml" />
+                                                <entry key="color" value="e5a039" />
+                                                <entry key="imagePath" value="C:\Users\hao_n\AppData\Local\Temp\baseline_notifications_24.xml" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                      <entry key="clipartAsset">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/notifications/baseline_notifications_24.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -160,6 +170,11 @@
                                           </PersistentState>
                                         </value>
                                       </entry>
+                                    </map>
+                                  </option>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="outputName" value="ic_notification" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -284,6 +299,11 @@
                                 </PersistentState>
                               </value>
                             </entry>
+                          </map>
+                        </option>
+                        <option name="values">
+                          <map>
+                            <entry key="outputIconType" value="LAUNCHER_LEGACY" />
                           </map>
                         </option>
                       </PersistentState>

@@ -12,4 +12,7 @@ public class Const {
     public static final String USER_KEY = "user_key";
     public static final String USER_DATA = "dataOfUser";
     public static final String BASKET_KEY = "basket_key";
+
+
+    public static final String CHANNEL_ID = "HELLO WORLD";
 }

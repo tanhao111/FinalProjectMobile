@@ -22,7 +22,7 @@ import com.google.gson.Gson;
 import com.project.adapter.CheckOutAdapter;
 import com.project.databaseDao.OrderDao;
 import com.project.models.ItemProduct;
-import com.project.models.Orders;
+import com.project.models.Order;
 import com.project.models.User;
 import com.project.util.Const;
 
@@ -77,7 +77,7 @@ public class CheckOutActivity extends AppCompatActivity {
         btnCheckOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Orders orders = new Orders(basketKey, userKey, totalCost);
+                Order orders = new Order(basketKey, userKey, totalCost);
                 OrderDao orderDao = new OrderDao();
 
                 orderDao.createNewOrder(orders);

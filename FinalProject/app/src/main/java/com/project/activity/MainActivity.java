@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -31,12 +32,30 @@ public class MainActivity extends AppCompatActivity {
 
         // set tab title
         ArrayList<String> title = new ArrayList<String>();
+        title.add("Inbox");
         title.add("Ordered");
         title.add("Manager Product");
         title.add("Report");
 
+
         tabLayout.setupWithViewPager(viewPager);
         prepareViewPaper(viewPager, title);
+
+        //Start service
+        if(!foregroundServiceRunning()){
+            Intent service = new Intent(getApplicationContext(), MyService.class);
+            startForegroundService(service);
+        }
+    }
+
+    private boolean foregroundServiceRunning(){
+        ActivityManager activityManager = (ActivityManager) getSystemService(getApplicationContext().ACTIVITY_SERVICE);
+        for(ActivityManager.RunningServiceInfo service: activityManager.getRunningServices(Integer.MAX_VALUE)) {
+            if(MyService.class.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -44,9 +63,11 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         // set tab title
         ArrayList<String> title = new ArrayList<String>();
+        title.add("Inbox");
         title.add("Ordered");
         title.add("Manager Product");
         title.add("Report");
+
 
         tabLayout.setupWithViewPager(viewPager);
         prepareViewPaper(viewPager, title);
@@ -57,21 +78,28 @@ public class MainActivity extends AppCompatActivity {
         OrderFragment orderFragment = new OrderFragment();
         ReportFragment reportFragment = new ReportFragment();
         ManagerProductsFragment managerProductsFragment = new ManagerProductsFragment();
+        MessageFragment messageFragment = new MessageFragment();
+        Bundle bundle;
 
-        Bundle bundle = new Bundle();
+        bundle = new Bundle();
         bundle.putString("title", title.get(0));
-        orderFragment.setArguments(bundle);
-        adapter.addFragment(orderFragment, title.get(0));
+        messageFragment.setArguments(bundle);
+        adapter.addFragment(messageFragment, title.get(0));
 
         bundle = new Bundle();
         bundle.putString("title", title.get(1));
-        managerProductsFragment.setArguments(bundle);
-        adapter.addFragment(managerProductsFragment, title.get(1));
+        orderFragment.setArguments(bundle);
+        adapter.addFragment(orderFragment, title.get(1));
 
         bundle = new Bundle();
         bundle.putString("title", title.get(2));
+        managerProductsFragment.setArguments(bundle);
+        adapter.addFragment(managerProductsFragment, title.get(2));
+
+        bundle = new Bundle();
+        bundle.putString("title", title.get(3));
         reportFragment.setArguments(bundle);
-        adapter.addFragment(reportFragment, title.get(2));
+        adapter.addFragment(reportFragment, title.get(3));
 
         viewPager.setAdapter(adapter);
     }

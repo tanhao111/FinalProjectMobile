@@ -4,16 +4,32 @@
 
 
     <!-- action button for refresh -->
+    <item
+        android:id="@+id/app_bar_search"
+        android:icon="@mipmap/ic_search_black_24dp"
+        android:title="Search"
+        app:actionViewClass="android.widget.SearchView"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
+
+    <item android:title="Message"
+        android:id="@+id/message"
+        android:orderInCategory="101"
+        app:showAsAction="always"
+        android:icon="@mipmap/ic_message"/>
+
     <item android:title="Cart"
         android:id="@+id/cart"
-        android:orderInCategory="100"
-        app:showAsAction="ifRoom"
+        android:orderInCategory="101"
+        app:showAsAction="always"
         android:icon="@drawable/ic_action_cart"/>
 
     <!-- action button for copy -->
     <item android:title="Account"
         android:id="@+id/account"
-        android:orderInCategory="100"
-        app:showAsAction="ifRoom"
+        android:orderInCategory="101"
+        app:showAsAction="always"
         android:icon="@drawable/ic_action_name"/>
+
+
 </menu>
