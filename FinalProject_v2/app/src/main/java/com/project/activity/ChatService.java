@@ -58,55 +58,57 @@ public class ChatService extends Service {
 
             SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(Const.SHARED_PREFERENCE, MODE_PRIVATE);
             String key = sharedPreferences.getString(Const.USER_KEY, "");
-            FirebaseDatabase db = FirebaseDatabase.getInstance();
-            DatabaseReference dbRef = db.getReference("/chats/" + key);
+            if(!key.isEmpty()) {
+                FirebaseDatabase db = FirebaseDatabase.getInstance();
+                DatabaseReference dbRef = db.getReference("/chats/" + key);
 
-            dbRef.addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                    Chat chat = snapshot.getValue(Chat.class);
-                    if (chat.getName().equals("Admin")) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            NotificationChannel channel = new NotificationChannel(Const.CHANNEL_ID, Const.CHANNEL_ID, NotificationManager.IMPORTANCE_DEFAULT);
-                            NotificationManager manager = getSystemService(NotificationManager.class);
-                            manager.createNotificationChannel(channel);
-                            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), Const.CHANNEL_ID)
-                                    .setContentTitle("Message from Admin")
-                                    .setSmallIcon(R.mipmap.ic_notification)
-                                    .setAutoCancel(true)
-                                    .setContentText(chat.getMessage());
+                dbRef.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                        Chat chat = snapshot.getValue(Chat.class);
+                        if (chat.getName().equals("Admin")) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                NotificationChannel channel = new NotificationChannel(Const.CHANNEL_ID, Const.CHANNEL_ID, NotificationManager.IMPORTANCE_DEFAULT);
+                                NotificationManager manager = getSystemService(NotificationManager.class);
+                                manager.createNotificationChannel(channel);
+                                NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), Const.CHANNEL_ID)
+                                        .setContentTitle("Message from Admin")
+                                        .setSmallIcon(R.mipmap.ic_notification)
+                                        .setAutoCancel(true)
+                                        .setContentText(chat.getMessage());
 
-                            Intent resultIntent = new Intent(getApplicationContext(), ChatActivity.class);
-                            resultIntent.setAction(Intent.ACTION_MAIN);
-                            resultIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-                            PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, resultIntent, 0);
-                            builder.setContentIntent(pendingIntent);
+                                Intent resultIntent = new Intent(getApplicationContext(), ChatActivity.class);
+                                resultIntent.setAction(Intent.ACTION_MAIN);
+                                resultIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                                PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, resultIntent, 0);
+                                builder.setContentIntent(pendingIntent);
 
-                            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getApplicationContext());
-                            managerCompat.notify(999, builder.build());
+                                NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getApplicationContext());
+                                managerCompat.notify(999, builder.build());
+                            }
                         }
                     }
-                }
 
-                @Override
-                public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                }
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                    }
 
-                @Override
-                public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot snapshot) {
 
-                }
+                    }
 
-                @Override
-                public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
-                }
+                    }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-            });
+                    }
+                });
+            }
         startForeground(1001, builder.build());
         return super.onStartCommand(intent, flags, startId);
     }
