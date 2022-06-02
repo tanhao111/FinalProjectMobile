@@ -1,6 +1,7 @@
 package com.project.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.project.activity.R;
+import com.project.activity.ShowBasketActivity;
 import com.project.databaseDao.BasketDao;
 import com.project.models.ItemProduct;
 import com.project.models.Product;
@@ -96,6 +98,9 @@ public class ShowBasketAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 basketDao.deleteItemOnBasket(basketKey, itemKey);
+                Intent intent = new Intent(context, ShowBasketActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
             }
         });
 

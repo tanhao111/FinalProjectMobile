@@ -56,8 +56,12 @@ public class ShowBasketActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     GenericTypeIndicator<Map<String, ItemProduct>> genericTypeIndicator = new GenericTypeIndicator<Map<String, ItemProduct>>() {};
                     Map<String, ItemProduct> productMap = snapshot.child("/productList/0/").getValue(genericTypeIndicator);
-                    ShowBasketAdapter showBasketAdapter = new ShowBasketAdapter(getApplicationContext(), productMap);
-                    listView.setAdapter(showBasketAdapter);
+                    if(productMap == null){
+                        Toast.makeText(getApplicationContext(), "No item", Toast.LENGTH_LONG).show();
+                    }else{
+                        ShowBasketAdapter showBasketAdapter = new ShowBasketAdapter(getApplicationContext(), productMap);
+                        listView.setAdapter(showBasketAdapter);
+                    }
                 }
 
                 @Override
